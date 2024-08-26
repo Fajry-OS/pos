@@ -54,6 +54,30 @@
                 </thead>
                 <tbody></tbody>
             </table>
+            <div class="row mt-2">
+                <div class="col-sm-8">
+                    <h3>Total</h3>
+                </div>
+                <div class="col-sm-4">
+                    <h4 class="total_price"></h4>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-sm-8">
+                    <h3>Di bayar</h3>
+                </div>
+                <div class="col-sm-4">
+                    <input type="number" class="form-control" id="dibayar">
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-sm-8">
+                    <h3>Kembali</h3>
+                </div>
+                <div class="col-sm-4">
+                    <input type="number" class="form-control" id="kembalian">
+                </div>
+            </div>
         </div>
     </form>
 @endsection

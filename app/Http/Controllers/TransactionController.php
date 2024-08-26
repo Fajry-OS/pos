@@ -14,6 +14,7 @@ class TransactionController extends Controller
     public function index()
     {
         $categories = Category::get();
+
         return view('penjualan.index', compact('categories'));
     }
 

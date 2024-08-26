@@ -159,11 +159,20 @@
             newRow += `<td>${product_name}</td>`;
             newRow += "<td>" + product_price.toLocaleString('id') + "</td>";
             newRow += "<td>" + product_qty + "</td>";
-            newRow += "<td>" + subTotal.toLocaleString('id') + "</td>";
+            newRow += "<td>" + subTotal + "<input type='text' class='sub_total_val' value='" + subTotal +
+                "'></td>";
             newRow += "<td></td>";
             newRow += "</tr>";
 
             $('tbody').append(newRow);
+
+            let total = 0;
+            $('.sub_total_val').each(function() {
+                let subTotal = parseFloat($(this).val()) || 0;
+                total += subTotal;
+            });
+
+            $('.total_price').text(total.toLocaleString('id-ID'));
         });
     </script>
 </body>
