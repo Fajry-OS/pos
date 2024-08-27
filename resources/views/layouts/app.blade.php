@@ -49,7 +49,7 @@
 
                 <!-- Default box -->
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header text-white" style="background-color: #1781d1;">
                         <h3 class="card-title">@yield('title')</h3>
 
                         <div class="card-tools">
@@ -62,6 +62,8 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        {{-- Sweet Alert css --}}
+                        @include('sweetalert::alert')
                         @yield('content')
                     </div>
                     <!-- /.card-body -->
@@ -101,6 +103,9 @@
     <script src="{{ asset('adm/dist/js/adminlte.min.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('adm/dist/js/demo.js') }}"></script>
+
+    {{-- Sweet Alert JS --}}
+    @include('sweetalert::alert', ['cdn' => 'https://cdn.jsdelivr.net/npm/sweetalert2@9'])
 
     <script>
         $('#category_id').change(function() {
@@ -156,15 +161,18 @@
 
             let newRow = "";
             newRow += "<tr>";
-            newRow += `<td>${product_name}</td>`;
+            newRow += `<td>${product_name}<input type='hidden' name='product_id[]' value=${produk_id}></td>`;
             newRow += "<td>" + product_price.toLocaleString('id') + "</td>";
-            newRow += "<td>" + product_qty + "</td>";
-            newRow += "<td>" + subTotal + "<input type='text' class='sub_total_val' value='" + subTotal +
+            newRow += "<td>" + product_qty + "<input type='hidden' name='qty[]' value='" + product_qty + "'></td>";
+            newRow += "<td>" + subTotal.toLocaleString('id-ID') +
+                "<input type='hidden' name='sub_total[]' class='sub_total_val' value='" + subTotal +
                 "'></td>";
             newRow += "<td></td>";
             newRow += "</tr>";
 
             $('tbody').append(newRow);
+
+            calculateChange();
 
             let total = 0;
             $('.sub_total_val').each(function() {
@@ -173,6 +181,32 @@
             });
 
             $('.total_price').text(total.toLocaleString('id-ID'));
+            $('#total_price_val').val(total);
+        });
+
+        function calculateChange() {
+            let total = parseFloat($('#total_price_val').val() || 0);
+            let dibayar = parseFloat($('#dibayar').val()) || 0;
+            let kembali = dibayar - total;
+            $('.kembalian_text').text(kembali.toLocaleString('id-ID'));
+            $('#kembalian').val(kembali);
+        }
+
+        function updateTotal() {
+            let total = 0;
+            $('.sub_total_val').each(function() {
+                let subTotal = parseFloat($(this).val()) || 0;
+                total += subTotal;
+            });
+
+            $('.total_price').text('Rp. ' + total.toLocaleString('id-ID'));
+            $('#total_price_val').val(total);
+        }
+
+        updateTotal();
+
+        $('#dibayar').on('change keyup', function() {
+            calculateChange();
         });
     </script>
 </body>

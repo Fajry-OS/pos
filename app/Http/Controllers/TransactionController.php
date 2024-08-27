@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Category;
+use App\Models\Sales;
 use App\Models\Product;
+use App\Models\Category;
+use App\Models\SalesDetail;
+use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 class TransactionController extends Controller
 {
@@ -14,8 +18,11 @@ class TransactionController extends Controller
     public function index()
     {
         $categories = Category::get();
+        $id_transaksi = Sales::max('id');
+        $id_transaksi++;
+        $kode_transaksi = "SL" . date("dmY") . sprintf("%03s", $id_transaksi);
 
-        return view('penjualan.index', compact('categories'));
+        return view('penjualan.index', compact('categories', 'kode_transaksi'));
     }
 
     /**
@@ -31,7 +38,26 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $dateFormat = date('Y-m-d');
+        $sales = Sales::create([
+            'trans_code' => $request->kode_transaksi,
+            'trans_date' => $dateFormat,
+            'trans_paid' => $request->dibayar,
+            'trans_total_price' => $request->total_price,
+            'trans_change' => $request->kembalian
+        ]);
+
+        foreach ($request->product_id as $key => $product) {
+            SalesDetail::create([
+                'sales_id'      => $sales->id,
+                'product_id'    => $request->product_id[$key],
+                'qty'           => $request->qty[$key],
+                'sub_total'     => $request->sub_total[$key]
+            ]);
+        }
+
+        Alert::toast('Data Berhasil Di Simpan', 'success');
+        return redirect()->to('print')->with('message', 'Transaksi Berhasil Disimpan');
     }
 
     /**
@@ -76,5 +102,10 @@ class TransactionController extends Controller
     {
         $product = Product::findOrFail($product_id);
         return response()->json($product);
+    }
+
+    public function print()
+    {
+        return view('penjualan.print');
     }
 }

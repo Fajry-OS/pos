@@ -27,8 +27,8 @@
             <div class="card-body">
                 <p class="login-box-msg">Sign in to start your session</p>
 
-                <form action="{{route('action-login')}}" method="post">
-                    {{-- @if(Session::has('message'))
+                <form action="{{ route('action-login') }}" method="post">
+                    {{-- @if (Session::has('message'))
                     <div class="alert alert-danger">{{session('message')}}</div>
                     @endif --}}
                     @csrf

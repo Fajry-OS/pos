@@ -20,9 +20,15 @@ class LoginController extends Controller
         ]);
 
         $credential = $request->only(['email', 'password']);
-        if(Auth::attempt($credential)){
+        if (Auth::attempt($credential)) {
             return redirect()->intended('dashboard');
         }
-        return redirect()->back()->withErrors(['message'=>'Login Gagal. Mohon Periksa Kembali Email dan Password Anda!!']);
+        return redirect()->back()->withErrors(['message' => 'Login Gagal. Mohon Periksa Kembali Email dan Password Anda!!']);
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('login');
     }
 }
