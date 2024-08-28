@@ -15,7 +15,7 @@ Route::resource('category', \App\Http\Controllers\CategoryController::class);
 Route::post('action-login', [\App\Http\Controllers\LoginController::class, 'actionLogin'])->name('action-login');
 
 
-Route::middleware(['auth'])->group(function () {
+Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::resource('dashboard', \App\Http\Controllers\DashboardController::class);
     Route::resource('product', \App\Http\Controllers\ProductController::class);
     Route::resource('penjualan', \App\Http\Controllers\TransactionController::class);
